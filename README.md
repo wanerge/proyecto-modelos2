@@ -2,7 +2,6 @@
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/USUARIO/REPO/blob/main/Proyecto_Final_Quiebra_Taiwan.ipynb)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Status: Finalizado](https://img.shields.io/badge/Status-Completado-success.svg)]()
 
 Trabajo final de laboratorio para la materia **Modelos y Simulación de Sistemas II** de la Universidad de Antioquia (UdeA). Implementa el ciclo completo de diseño y evaluación experimental en Machine Learning para la detección temprana de quiebra empresarial sobre el conjunto de datos de referencia *Taiwanese Bankruptcy Prediction* (UCI Machine Learning Repository ID: 572).
@@ -105,8 +104,3 @@ Haga clic en la insignia superior **"Open in Colab"** o cargue el archivo `Proye
 | **Random Forest** | PCA (k=23) | **75.5%** | 0.324 $\pm$ 0.149 | 0.387 [0.275, 0.508] | 0.935 | 0.515 [0.410, 0.618] | 0.742 | 0.231 |
 | **SVM (RBF Kernel)** | PCA (k=31) | **67.0%** | 0.374 $\pm$ 0.136 | 0.406 [0.290, 0.528] | 0.939 | **0.538 [0.432, 0.639]** | 0.652 | 0.316 |
 | **HistGradientBoosting** | Original (94) | 0.0% | 0.425 $\pm$ 0.108 | **0.453 [0.338, 0.572]** | 0.933 | 0.522 [0.415, 0.621] | 0.758 | 0.233 |
-
----
-
-## 📜 Licencia
-Este proyecto se distribuye bajo los términos de la Licencia MIT.
