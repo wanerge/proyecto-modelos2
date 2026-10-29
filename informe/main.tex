@@ -1,0 +1,107 @@
+\documentclass[journal]{IEEEtran}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish,es-tabla]{babel}
+\usepackage{amsmath,amsfonts,amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{cite}
+\usepackage{url}
+\usepackage{microtype}
+\usepackage{subcaption}
+
+\begin{document}
+
+\title{Predicción de Quiebra Empresarial con Aprendizaje de Máquina sobre el Dataset Taiwanese Bankruptcy}
+
+\author{Wanerge~Almanza~Velasquez,
+        Jhon~Fredy~Hoyos~Cardenas,
+        y~Miguel~Angel~Castiblanco~Florez%
+\thanks{Los autores son estudiantes del curso de Modelos y Simulación de Sistemas II, Departamento de Ingeniería de Sistemas, Facultad de Ingeniería, Universidad de Antioquia (UdeA), Medellín, Colombia.}%
+}
+
+\markboth{Modelos y Simulación de Sistemas II, Universidad de Antioquia, Octubre~2026}%
+{Almanza \MakeLowercase{\textit{et al.}}: Predicción de Quiebra Empresarial con Aprendizaje de Máquina}
+
+\maketitle
+
+\begin{abstract}
+La insolvencia financiera corporativa acarrea pérdidas severas en los mercados crediticios e inversionistas. La detección oportuna del estrés financiero constituye un desafío crítico debido a la asimetría de costos y al marcado desbalance entre empresas solventes y en quiebra. En este artículo se aborda el conjunto de datos de quiebra empresarial de Taiwán (\textit{Taiwanese Bankruptcy Prediction}, UCI ID: 572), conformado por 6,819 firmas y 94 indicadores contables útiles, caracterizado por una proporción de desbalance de 30 a 1 (3.23\% en bancarrota) y una alta multicolinealidad con colas pesadas. Siguiendo un protocolo de validación cruzada estratificada repetida y aislando un conjunto de prueba independiente para prevenir la fuga de datos (\textit{data leakage}), se evaluaron cinco familias de modelos obligatorios y dos complementarios. Asimismo, se implementaron técnicas de reducción de dimensionalidad mediante Análisis de Componentes Principales (PCA) y aprendizaje de variedades no lineales con UMAP, reajustando hiperparámetros en los subespacios latentes. Random Forest y Support Vector Machines (SVM con kernel RBF) alcanzaron un desempeño sobresaliente ($\text{ROC-AUC} > 0.93$ y $F_2 > 0.53$), superando los puntos de referencia de la literatura. Se demostró que PCA retiene el 90\% de la varianza con solo 23 componentes (reducción del 75.5\%) sin comprometer la capacidad predictiva. Finalmente, el análisis de explicabilidad con valores SHAP permitió aislar el impacto directo de los retornos sobre activos (ROA), la persistencia del EPS y la razón de deuda en el riesgo de insolvencia.
+\end{abstract}
+
+\begin{IEEEkeywords}
+Predicción de quiebra, desbalance de clases, F2-score, PCA, UMAP, SHAP, Taiwanese Bankruptcy, Aprendizaje de Máquina.
+\end{IEEEkeywords}
+
+\section{Introducción y Descripción del Problema}
+\IEEEPARstart{L}{a} quiebra corporativa representa una de las mayores fuentes de riesgo sistémico en el sistema financiero. Históricamente, la modelación de la bancarrota descansó en técnicas estadísticas paramétricas lineales como el Z-Score de Altman \cite{altman1968financial} basado en Análisis Discriminante Lineal (LDA) y el modelo O-Score de Ohlson \cite{ohlson1980financial} fundamentado en Regresión Logística. No obstante, en la práctica contable contemporánea, estos modelos tradicionales se ven fuertemente limitados por supuestos distributivos restrictivos de normalidad multivariada, su incapacidad para capturar interacciones no lineales complejas y su optimización indiferenciada que ignora el costo desproporcionado de los Falsos Negativos.
+
+Bajo este panorama, el empleo de técnicas de Aprendizaje de Máquina (Machine Learning - ML) resulta altamente pertinente. Los algoritmos no paramétricos, los ensambles basados en árboles y los métodos de vectores de soporte con funciones de kernel permiten aprender fronteras de decisión adaptativas sin requerir supuestos paramétricos rígidos.
+
+\subsection{Composición del Conjunto de Datos}
+El estudio se realiza sobre el dataset \textit{Taiwanese Bankruptcy Prediction} (UCI ID: 572), recopilado por el \textit{Taiwan Economic Journal} (TEJ) entre 1999 y 2009. El conjunto cuenta con $N = 6,819$ firmas auditadas y 96 columnas originales. Tras una auditoría exhaustiva de calidad de datos, se verificó la ausencia total de registros nulos (0 NaNs) y filas duplicadas. 
+
+Sin embargo, se identificó que la columna \texttt{Net Income Flag} presenta varianza cero (constante igual a 1 en las 6,819 filas), por lo que fue descartada, consolidando un espacio de 94 características explicativas. La variable objetivo binaria (\texttt{Bankrupt?}) presenta 6,599 observaciones solventes (96.77\%) y 220 registros en quiebra (3.23\%), conformando un desbalance de 30:1. Asimismo, se detectó que 24 variables poseen magnitudes que exceden la unidad alcanzando hasta $10^{10}$, y 62 variables presentan coeficientes de asimetría absoluta $|skew| > 5$, justificando el uso de un escalado normalizado por cuantiles (\texttt{QuantileTransformer}).
+
+\subsection{Paradigma de Aprendizaje}
+Se adoptó el paradigma de Aprendizaje Supervisado en configuración de Clasificación Binaria Desbalanceada con Asimetría de Costos. El objetivo consiste en minimizar el riesgo empírico ponderado garantizando una elevada sensibilidad (Recall) en la detección de empresas insolventes sin generar una tasa prohibitiva de falsas alarmas.
+
+\section{Estado del Arte}
+La literatura especializada en quiebra sobre este dataset ha explorado diversas alternativas metodológicas:
+\begin{enumerate}
+    \item \textit{Liang et al. (2016)} \cite{liang2016financial}: Evaluaron SVM, KNN, CART, MLP y Naive Bayes bajo un esquema supervisado balanceado 1:1 (239 quiebras vs 239 solventes). Demostraron la superioridad de SVM (81.3\% de exactitud), aunque sus métricas no reflejan el desbalance real.
+    \item \textit{Wang y Liu (2021)} \cite{wang2021undersampling}: Examinaron técnicas de submuestreo sobre el desbalance natural, justificando el uso del $F_2$-Score ($\beta=2$) para priorizar el Recall ante pérdidas bancarias. Su mejor configuración fue Gaussian Naive Bayes + ENN con $F_2 = 0.423$.
+    \item \textit{Pham et al. (2025)} \cite{pham2025comprehensive}: Aplicaron un flujo híbrido con SMOTE-ENN y optimización BPSO para reducir a 34 variables, reportando $F_1 = 98.5\%$ con redes neuronales. No obstante, tales resultados reflejan sobreestimación por evaluar en datos remuestreados sintéticamente.
+    \item \textit{Azad et al. (2026)} \cite{azad2026predicting}: Diseñaron un marco de destilación de conocimiento de un Stacking a un modelo liviano HistGradientBoosting con regularización LASSO y validación estratificada de 5 pliegues, logrando $F_1 = 69.1\%$ y Recall = $81.4\%$.
+\end{enumerate}
+
+\section{Entrenamiento y Evaluación de Modelos}
+\subsection{Configuración Experimental}
+Para garantizar la validez metodológica, los datos se dividieron en una partición estratificada Train / Test (70\% / 30\%), congelando estrictamente el conjunto de prueba (2,046 muestras, 66 quiebras). En el conjunto de entrenamiento (4,773 muestras, 154 quiebras), se implementó una Validación Cruzada Estratificada Repetida (5 pliegues $\times$ 3 repeticiones = 15 pliegues) mediante \texttt{RepeatedStratifiedKFold}.
+
+Todo preprocesamiento se encapsuló en un \texttt{Pipeline} contra fuga de datos. La métrica principal de optimización independiente del umbral fue el Área Bajo la Curva Precision-Recall (PR-AUC), mientras que el umbral de decisión operativo se calibró en las predicciones fuera de pliegue (OOF) maximizando el $F_2$-Score. En test, se calcularon Intervalos de Confianza al 95\% mediante 1,000 réplicas Bootstrap.
+
+\subsection{Resultados de los Modelos Base}
+En el Cuadro~\ref{tab:modelos_base} se sintetizan los resultados de las cinco familias obligatorias evaluadas en el espacio original de 94 variables:
+\begin{table*}[t]
+\centering
+\caption{Desempeño Comparativo de los Modelos de Aprendizaje Evaluados en Test (Espacio Original)}
+\label{tab:modelos_base}
+\begin{tabular}{lcccccc}
+\toprule
+\textbf{Modelo} & \textbf{Val PR-AUC ($\pm 2\sigma$)} & \textbf{Test PR-AUC (95\% CI)} & \textbf{Test ROC-AUC} & \textbf{Test $F_2$ (95\% CI)} & \textbf{Recall} & \textbf{Precisión} \\
+\midrule
+Regresión Logística & $0.372 \pm 0.098$ & $0.401$ $[0.285, 0.518]$ & $0.925$ & $0.480$ $[0.374, 0.579]$ & $0.773$ & $0.202$ \\
+LDA (Shrinkage) & $0.379 \pm 0.147$ & $0.432$ $[0.320, 0.551]$ & $0.922$ & $0.539$ $[0.428, 0.638]$ & $0.788$ & $0.248$ \\
+KNN ($k=15$, distance) & $0.316 \pm 0.137$ & $0.435$ $[0.322, 0.555]$ & $0.854$ & $0.550$ $[0.443, 0.647]$ & $0.803$ & $0.252$ \\
+Random Forest & $\mathbf{0.393 \pm 0.123}$ & $0.404$ $[0.291, 0.525]$ & $\mathbf{0.941}$ & $\mathbf{0.536}$ $[0.430, 0.635]$ & $0.742$ & $0.254$ \\
+Red Neuronal MLP & $0.338 \pm 0.242$ & $\mathbf{0.480}$ $[0.371, 0.601]$ & $0.924$ & $0.506$ $[0.398, 0.605]$ & $0.727$ & $0.231$ \\
+SVM (RBF Kernel) & $0.383 \pm 0.163$ & $0.418$ $[0.302, 0.539]$ & $0.938$ & $0.478$ $[0.371, 0.577]$ & $0.697$ & $0.224$ \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+\subsection{Selección de los Dos Mejores Modelos}
+Random Forest y SVM (RBF) fueron seleccionados como los dos mejores modelos. Random Forest exhibió el mayor PR-AUC promedio en validación ($0.393$) y el mayor ROC-AUC en test ($0.941$), mientras que SVM presentó una estabilidad remarcable en la separación no lineal del margen.
+
+\section{Reducción de Dimensionalidad}
+\subsection{Análisis Individual de Variables}
+El cálculo univariado de la Razón de Discriminación de Fisher ($J$) y del AUC univariado sobre entrenamiento reveló que los ratios de rentabilidad sobre activos (\texttt{ROA}), valor neto sobre activos (\texttt{Net worth/Assets}) y la persistencia de ganancias (\texttt{Persistent EPS}) concentran el mayor poder predictivo ($J \approx 0.99$, $\text{AUC} \approx 0.88$). Asimismo, se detectaron 20 variables redundantes con $|r| \ge 0.95$ susceptibles de descarte.
+
+\subsection{Extracción Lineal con PCA}
+El análisis de varianza explicada acumulada evidenció que $k=23$ componentes retienen el 90\% de la varianza (75.5\% de reducción) y $k=31$ retienen el 95\% (67.0\% de reducción). Al reajustar los hiperparámetros en los subespacios de PCA, Random Forest alcanzó en PCA-90\% un Test PR-AUC de $0.387$ y $F_2 = 0.515$, y SVM alcanzó en PCA-95\% un $F_2 = 0.538$, demostrando que es posible eliminar más de las tres cuartas partes de las dimensiones sin degradación significativa.
+
+\subsection{Extracción No Lineal con UMAP}
+Al proyectar inductivamente los datos con UMAP a dimensiones latentes $k=10$ y $k=20$, los modelos retuvieron un Recall superior al $72\%$, aunque con un PR-AUC levemente inferior ($0.323$), indicando que la estructura intrínseca de los ratios contables responde mejor a combinaciones lineales ortogonales (PCA).
+
+\section{Explicabilidad del Modelo con SHAP}
+El análisis de explicabilidad global mediante \texttt{TreeExplainer} sobre Random Forest confirmó que caídas en el ROA y en las utilidades netas por acción impulsan de forma monótona el valor SHAP positivo hacia la quiebra, mientras que niveles elevados de apalancamiento (\texttt{Debt ratio \%}) incrementan significativamente la probabilidad de insolvencia, validando la coherencia financiera del modelo.
+
+\section{Conclusiones}
+1. El modelado con Random Forest y SVM demostró ser altamente eficaz en la predicción de quiebra empresarial bajo desbalance 30:1, alcanzando un ROC-AUC del 94.1\% y un $F_2$ del 53.6\%.
+2. La técnica de PCA permitió comprimir el espacio dimensional en un 75.5\% (a 23 componentes) preservando la integridad diagnóstica del sistema.
+3. La calibración empírica del umbral de decisión sobre predicciones OOF demostró ser un mecanismo indispensable para alinear el clasificador con los costos económicos reales de la industria bancaria.
+
+\bibliographystyle{IEEEtran}
+\bibliography{refs}
+
+\end{document}
