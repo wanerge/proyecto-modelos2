@@ -1,0 +1,26 @@
+# Dataset original y carpetas privadas del curso
+Informacion/
+*.zip
+*.tar.gz
+
+# Entornos virtuales y Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+env/
+ENV/
+
+# Jupyter y checkpoints
+.ipynb_checkpoints/
+*/.ipynb_checkpoints/*
+
+# IDEs y editores
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Copilot / cache temporal
+.copilot/
