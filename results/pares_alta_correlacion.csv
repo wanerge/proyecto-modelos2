@@ -1,29 +1,29 @@
-Variable 1,Variable 2,Correlación
+Variable 1,Variable 2,Correlacion (|r|)
 Current Liabilities/Liability,Current Liability to Liability,1.0
 Current Liabilities/Equity,Current Liability to Equity,1.0
-Debt ratio %,Net worth/Assets,-0.9999999999999993
-Operating Gross Margin,Gross Profit to Sales,0.9999999924887606
-Net Value Per Share (A),Net Value Per Share (C),0.9998372673766628
-Operating Gross Margin,Realized Sales Gross Margin,0.9995182781255221
-Realized Sales Gross Margin,Gross Profit to Sales,0.9995182260040115
-Net Value Per Share (B),Net Value Per Share (A),0.9993420298970497
-Net Value Per Share (B),Net Value Per Share (C),0.9991785547277325
-¥O¥p¥e¥r¥a¥t¥i¥n¥g¥ ¥P¥r¥o¥f¥i¥t¥ ¥P¥e¥r¥ ¥S¥h¥a¥r¥e¥ ¥(¥Y¥u¥a¥n¥ ¥¥¥)¥,Operating profit/Paid-in capital,0.9986961505784385
-After-tax Net Profit Growth Rate,Regular Net Profit Growth Rate,0.9961861926223086
-Pre-tax net Interest Rate,Continuous interest rate (after tax),0.9936165193085659
-ROA(C) before interest and depreciation before interest,ROA(B) before interest and depreciation after tax,0.9868494970182541
-Pre-tax net Interest Rate,After-tax net Interest Rate,0.9863790242582028
-After-tax net Interest Rate,Continuous interest rate (after tax),0.984452328775917
-Current Liability to Equity,Liability to Equity,0.963908387166064
-Current Liabilities/Equity,Liability to Equity,0.963908387166064
-¥P¥e¥r¥ ¥S¥h¥a¥r¥e¥ ¥N¥e¥t¥ ¥p¥r¥o¥f¥i¥t¥ ¥b¥e¥f¥o¥r¥e¥ ¥t¥a¥x¥ ¥(¥Y¥u¥a¥n¥ ¥¥¥)¥,Net profit before tax/Paid-in capital,0.9627228889556713
-ROA(A) before interest and % after tax,Net Income to Total Assets,0.9615519166312979
-Persistent EPS in the Last Four Seasons,Net profit before tax/Paid-in capital,0.9594608424800604
-Borrowing dependency,Liability to Equity,0.9558567721071973
-ROA(A) before interest and % after tax,ROA(B) before interest and depreciation after tax,0.9557406252835042
-Persistent EPS in the Last Four Seasons,¥P¥e¥r¥ ¥S¥h¥a¥r¥e¥ ¥N¥e¥t¥ ¥p¥r¥o¥f¥i¥t¥ ¥b¥e¥f¥o¥r¥e¥ ¥t¥a¥x¥ ¥(¥Y¥u¥a¥n¥ ¥¥¥)¥,0.9555910456161516
-Working capitcal Turnover Rate,Cash Flow to Sales,0.9481940614911444
-ROA(C) before interest and depreciation before interest,ROA(A) before interest and % after tax,0.9401237079700807
-Operating Profit Rate,Pre-tax net Interest Rate,0.9164477798560053
-Operating Profit Rate,Continuous interest rate (after tax),0.9155437834862158
-ROA(B) before interest and depreciation after tax,Net Income to Total Assets,0.9120401733352151
+Debt ratio %,Net worth/Assets,1.0
+Operating Gross Margin,Gross Profit to Sales,1.0
+Net Value Per Share (A),Net Value Per Share (C),0.999837
+Operating Gross Margin,Realized Sales Gross Margin,0.999518
+Realized Sales Gross Margin,Gross Profit to Sales,0.999518
+Net Value Per Share (B),Net Value Per Share (A),0.999342
+Net Value Per Share (B),Net Value Per Share (C),0.999179
+Operating Profit Per Share (Yuan ¥),Operating profit/Paid-in capital,0.998696
+After-tax Net Profit Growth Rate,Regular Net Profit Growth Rate,0.996186
+Pre-tax net Interest Rate,Continuous interest rate (after tax),0.993617
+ROA(C) before interest and depreciation before interest,ROA(B) before interest and depreciation after tax,0.986849
+Pre-tax net Interest Rate,After-tax net Interest Rate,0.986379
+After-tax net Interest Rate,Continuous interest rate (after tax),0.984452
+Current Liabilities/Equity,Liability to Equity,0.963908
+Current Liability to Equity,Liability to Equity,0.963908
+Per Share Net profit before tax (Yuan ¥),Net profit before tax/Paid-in capital,0.962723
+ROA(A) before interest and % after tax,Net Income to Total Assets,0.961552
+Persistent EPS in the Last Four Seasons,Net profit before tax/Paid-in capital,0.959461
+Borrowing dependency,Liability to Equity,0.955857
+ROA(A) before interest and % after tax,ROA(B) before interest and depreciation after tax,0.955741
+Persistent EPS in the Last Four Seasons,Per Share Net profit before tax (Yuan ¥),0.955591
+Working capitcal Turnover Rate,Cash Flow to Sales,0.948194
+ROA(C) before interest and depreciation before interest,ROA(A) before interest and % after tax,0.940124
+Operating Profit Rate,Pre-tax net Interest Rate,0.916448
+Operating Profit Rate,Continuous interest rate (after tax),0.915544
+ROA(B) before interest and depreciation after tax,Net Income to Total Assets,0.91204

@@ -36,7 +36,6 @@ Trabajo final de laboratorio para la materia **Modelos y Simulación de Sistemas
 proyecto-modelos2/
 ├── Proyecto_Final_Quiebra_Taiwan.ipynb  # Notebook maestro unificado (compatible con Google Colab)
 ├── requirements.txt                    # Dependencias de Python requeridas
-├── PLAN_PROYECTO.md                    # Documento formal de planificación por fases
 ├── data/
 │   ├── README.md                       # Ficha técnica del dataset
 │   └── data.csv                        # Dataset en formato CSV (11 MB)
@@ -97,10 +96,24 @@ Haga clic en la insignia superior **"Open in Colab"** o cargue el archivo `Proye
 
 ## 📊 Síntesis de Resultados Empíricos
 
-| Modelo | Espacio | Reducción (%) | Val PR-AUC ($\pm 2\sigma$) | Test PR-AUC [95% CI] | Test ROC-AUC | Test $F_2$ [95% CI] | Test Recall | Test Precision |
-| :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| **Random Forest** | Original (94) | 0.0% | **0.393 $\pm$ 0.123** | 0.404 [0.291, 0.525] | **0.941** | **0.536 [0.430, 0.635]** | 0.742 | 0.254 |
-| **SVM (RBF Kernel)** | Original (94) | 0.0% | 0.383 $\pm$ 0.163 | 0.418 [0.302, 0.539] | 0.938 | 0.478 [0.371, 0.577] | 0.697 | 0.224 |
-| **Random Forest** | PCA (k=23) | **75.5%** | 0.324 $\pm$ 0.149 | 0.387 [0.275, 0.508] | 0.935 | 0.515 [0.410, 0.618] | 0.742 | 0.231 |
-| **SVM (RBF Kernel)** | PCA (k=31) | **67.0%** | 0.374 $\pm$ 0.136 | 0.406 [0.290, 0.528] | 0.939 | **0.538 [0.432, 0.639]** | 0.652 | 0.316 |
-| **HistGradientBoosting** | Original (94) | 0.0% | 0.425 $\pm$ 0.108 | **0.453 [0.338, 0.572]** | 0.933 | 0.522 [0.415, 0.621] | 0.758 | 0.233 |
+| Modelo | Espacio | Reducción | Val PR-AUC ($\pm 2\sigma$) | Test PR-AUC | Test ROC-AUC | Test $F_2$ | Test Recall | Test Precision | Test MCC |
+| :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| Regresion Logistica | Original (94) | 0.0% | 0.372 ± 0.098 | 0.401 | 0.938 | 0.480 | 0.621 | 0.252 | 0.365 |
+| LDA (Shrinkage) | Original (94) | 0.0% | 0.379 ± 0.147 | 0.432 | 0.936 | 0.539 | 0.712 | 0.273 | 0.413 |
+| KNN (k=15, distance) | Original (94) | 0.0% | 0.316 ± 0.137 | 0.435 | 0.884 | **0.550** | 0.788 | 0.249 | 0.413 |
+| Random Forest | Original (94) | 0.0% | 0.393 ± 0.123 | 0.404 | 0.947 | 0.536 | 0.682 | 0.288 | 0.417 |
+| Red Neuronal MLP | Original (94) | 0.0% | 0.338 ± 0.242 | **0.480** | 0.942 | 0.506 | 0.606 | 0.305 | 0.404 |
+| SVM (RBF Kernel) | Original (94) | 0.0% | 0.383 ± 0.163 | 0.418 | 0.940 | 0.478 | 0.606 | 0.260 | 0.367 |
+| Random Forest | PCA 90% Var (k=23) | 75.5% | 0.319 ± 0.134 | 0.382 | 0.931 | 0.494 | 0.682 | 0.236 | 0.369 |
+| SVM (RBF Kernel) | PCA 90% Var (k=23) | 75.5% | 0.349 ± 0.146 | 0.378 | 0.932 | 0.531 | 0.758 | 0.241 | 0.397 |
+| Random Forest | PCA 95% Var (k=31) | 67.0% | 0.336 ± 0.122 | 0.394 | 0.934 | 0.458 | 0.621 | 0.223 | 0.339 |
+| SVM (RBF Kernel) | PCA 95% Var (k=31) | 67.0% | 0.374 ± 0.143 | 0.408 | 0.932 | 0.503 | 0.651 | 0.264 | 0.386 |
+| Random Forest | UMAP (k=10) | 89.4% | 0.301 ± 0.176 | 0.327 | 0.905 | 0.482 | 0.697 | 0.216 | 0.354 |
+| SVM (RBF Kernel) | UMAP (k=10) | 89.4% | 0.250 ± 0.115 | 0.268 | 0.909 | 0.465 | 0.788 | 0.176 | 0.335 |
+| Random Forest | UMAP (k=20) | 78.7% | 0.262 ± 0.131 | 0.304 | 0.907 | 0.450 | 0.515 | 0.298 | 0.366 |
+| SVM (RBF Kernel) | UMAP (k=20) | 78.7% | 0.202 ± 0.085 | 0.212 | 0.898 | 0.470 | 0.758 | 0.187 | 0.339 |
+| Gaussian NB (Extra) | Original (94) | 0.0% | 0.255 ± 0.066 | 0.267 | 0.925 | 0.473 | 0.849 | 0.171 | 0.342 |
+| HistGradientBoosting (Extra) | Original (94) | 0.0% | 0.425 ± 0.108 | 0.453 | **0.954** | 0.522 | 0.576 | 0.380 | **0.446** |
+
+> Todos los valores reproducen literalmente los archivos de `results/` generados por el notebook (ningún número se transcribe a mano). En negrita, el mejor valor de cada columna. Los intervalos de confianza al 95 % (bootstrap estratificado, 1 000 réplicas) de los modelos del espacio original están en `results/tabla_modelos_base.csv`.
+
