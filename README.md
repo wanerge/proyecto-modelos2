@@ -1,6 +1,6 @@
 # Predicción de Quiebra Empresarial con Aprendizaje de Máquina (Taiwanese Bankruptcy)
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/USUARIO/REPO/blob/main/Proyecto_Final_Quiebra_Taiwan.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/wanerge/proyecto-modelos2/blob/main/Proyecto_Final_Quiebra_Taiwan.ipynb)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/)
 [![Status: Finalizado](https://img.shields.io/badge/Status-Completado-success.svg)]()
 
@@ -34,31 +34,22 @@ Trabajo final de laboratorio para la materia **Modelos y Simulación de Sistemas
 
 ```text
 proyecto-modelos2/
-├── Proyecto_Final_Quiebra_Taiwan.ipynb  # Notebook maestro unificado (compatible con Google Colab)
+├── Proyecto_Final_Quiebra_Taiwan.ipynb  # Notebook maestro: todo el proceso, ejecutable de principio a fin (Colab)
 ├── requirements.txt                    # Dependencias de Python requeridas
+├── proyecto_modelos_2.pdf              # Informe en formato IEEE (compilado desde informe/main.tex)
 ├── data/
 │   ├── README.md                       # Ficha técnica del dataset
 │   └── data.csv                        # Dataset en formato CSV (11 MB)
-├── figures/                            # Gráficos generados para el informe (300 DPI)
-│   ├── fig1_desbalance_clases.png
-│   ├── fig2_asimetria_outliers.png
-│   ├── fig3_matriz_correlaciones.png
-│   ├── fig4_curvas_roc_pr_base.png
-│   ├── fig5_matrices_confusion_base.png
-│   ├── fig6_pca_varianza_explicada.png
-│   ├── fig7_umap_pca_2d.png
-│   └── fig8_shap_summary.png
-├── results/                            # Tablas comparativas y análisis exportados en CSV
-│   ├── pares_alta_correlacion.csv
-│   ├── analisis_individual_variables.csv
-│   ├── variables_candidatas_eliminar.csv
-│   ├── tabla_modelos_base.csv
-│   ├── tabla_pca_resultados.csv
-│   ├── tabla_umap_resultados.csv
-│   ├── tabla_modelos_adicionales.csv
-│   └── comparativa_global_espacios.csv
+├── figures/                            # Gráficos generados por el notebook (300 DPI)
+├── results/                            # Tablas exportadas por el notebook en CSV
+│   ├── tabla_hiperparametros_malla.csv # Mallas de hiperparámetros evaluadas por modelo
+│   ├── tabla_modelos_base.csv          # 6 modelos en el espacio original (Train / Val / Test, IC bootstrap)
+│   ├── tabla_pca_resultados.csv        # Random Forest y SVM en PCA
+│   ├── tabla_umap_resultados.csv       # Random Forest y SVM en UMAP
+│   ├── tabla_modelos_adicionales.csv   # Gaussian NB e HistGradientBoosting
+│   └── comparativa_global_espacios.csv # Original vs. PCA vs. UMAP
 └── informe/
-    ├── main.tex                        # Borrador del informe en formato IEEE Transactions (<= 10 págs.)
+    ├── main.tex                        # Informe en formato IEEE (compilar desde esta carpeta)
     └── refs.bib                        # Referencias bibliográficas en BibTeX
 ```
 
@@ -67,12 +58,14 @@ proyecto-modelos2/
 ## 🚀 Instrucciones de Ejecución
 
 ### Opción 1: Ejecutar directamente en Google Colab
-Haga clic en la insignia superior **"Open in Colab"** o cargue el archivo `Proyecto_Final_Quiebra_Taiwan.ipynb` en Colab. El notebook detectará automáticamente el entorno y descargará el dataset directamente desde UCI mediante `ucimlrepo`, por lo que **no requiere subir archivos manualmente**.
+Haga clic en la insignia superior **"Open in Colab"** o cargue el archivo `Proyecto_Final_Quiebra_Taiwan.ipynb` en Colab. El notebook descarga el dataset desde UCI mediante `ucimlrepo`, por lo que **no requiere subir archivos manualmente**.
+
+> **Tiempo de ejecución:** la búsqueda de hiperparámetros hace que el notebook completo tarde varios minutos (unos 6 min en un PC de escritorio con 24 núcleos; bastante más en Colab). El archivo ya incluye todas las salidas guardadas.
 
 ### Opción 2: Ejecución en Entorno Local
 1. Clone el repositorio:
    ```bash
-   git clone https://github.com/USUARIO/REPO.git
+   git clone https://github.com/wanerge/proyecto-modelos2.git
    cd proyecto-modelos2
    ```
 2. Cree y active un entorno virtual:
@@ -94,26 +87,34 @@ Haga clic en la insignia superior **"Open in Colab"** o cargue el archivo `Proye
 
 ---
 
+## 🧪 Cómo se ajustan los modelos (resumen)
+
+1. El 30 % de las empresas (2,046 con 66 quiebras) se reserva como **Test** y no interviene en ninguna decisión.
+2. Con el 70 % restante (Train) se prueba una **malla pequeña de hiperparámetros** por modelo (`results/tabla_hiperparametros_malla.csv`) con validación cruzada de 5 pliegues y se elige la combinación con mayor **PR-AUC**.
+3. Con esa combinación se repite la validación 5×3 (15 pliegues) para calibrar el umbral de decisión maximizando **F2**.
+4. El procedimiento se repite en cada espacio de variables (original, PCA y UMAP).
+
+---
+
 ## 📊 Síntesis de Resultados Empíricos
 
-| Modelo | Espacio | Reducción | Val PR-AUC ($\pm 2\sigma$) | Test PR-AUC | Test ROC-AUC | Test $F_2$ | Test Recall | Test Precision | Test MCC |
-| :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| Regresion Logistica | Original (94) | 0.0% | 0.372 ± 0.098 | 0.401 | 0.938 | 0.480 | 0.621 | 0.252 | 0.365 |
-| LDA (Shrinkage) | Original (94) | 0.0% | 0.379 ± 0.147 | 0.432 | 0.936 | 0.539 | 0.712 | 0.273 | 0.413 |
-| KNN (k=15, distance) | Original (94) | 0.0% | 0.316 ± 0.137 | 0.435 | 0.884 | **0.550** | 0.788 | 0.249 | 0.413 |
-| Random Forest | Original (94) | 0.0% | 0.393 ± 0.123 | 0.404 | 0.947 | 0.536 | 0.682 | 0.288 | 0.417 |
-| Red Neuronal MLP | Original (94) | 0.0% | 0.338 ± 0.242 | **0.480** | 0.942 | 0.506 | 0.606 | 0.305 | 0.404 |
-| SVM (RBF Kernel) | Original (94) | 0.0% | 0.383 ± 0.163 | 0.418 | 0.940 | 0.478 | 0.606 | 0.260 | 0.367 |
-| Random Forest | PCA 90% Var (k=23) | 75.5% | 0.319 ± 0.134 | 0.382 | 0.931 | 0.494 | 0.682 | 0.236 | 0.369 |
-| SVM (RBF Kernel) | PCA 90% Var (k=23) | 75.5% | 0.349 ± 0.146 | 0.378 | 0.932 | 0.531 | 0.758 | 0.241 | 0.397 |
-| Random Forest | PCA 95% Var (k=31) | 67.0% | 0.336 ± 0.122 | 0.394 | 0.934 | 0.458 | 0.621 | 0.223 | 0.339 |
-| SVM (RBF Kernel) | PCA 95% Var (k=31) | 67.0% | 0.374 ± 0.143 | 0.408 | 0.932 | 0.503 | 0.651 | 0.264 | 0.386 |
-| Random Forest | UMAP (k=10) | 89.4% | 0.301 ± 0.176 | 0.327 | 0.905 | 0.482 | 0.697 | 0.216 | 0.354 |
-| SVM (RBF Kernel) | UMAP (k=10) | 89.4% | 0.250 ± 0.115 | 0.268 | 0.909 | 0.465 | 0.788 | 0.176 | 0.335 |
-| Random Forest | UMAP (k=20) | 78.7% | 0.262 ± 0.131 | 0.304 | 0.907 | 0.450 | 0.515 | 0.298 | 0.366 |
-| SVM (RBF Kernel) | UMAP (k=20) | 78.7% | 0.202 ± 0.085 | 0.212 | 0.898 | 0.470 | 0.758 | 0.187 | 0.339 |
-| Gaussian NB (Extra) | Original (94) | 0.0% | 0.255 ± 0.066 | 0.267 | 0.925 | 0.473 | 0.849 | 0.171 | 0.342 |
-| HistGradientBoosting (Extra) | Original (94) | 0.0% | 0.425 ± 0.108 | 0.453 | **0.954** | 0.522 | 0.576 | 0.380 | **0.446** |
+| Modelo | Espacio | Reducción | Hiperparámetros elegidos | Train PR-AUC | Val PR-AUC (±2σ) | Test PR-AUC | Test ROC-AUC | Test F2 | Recall | Precisión |
+| :--- | :--- | :---: | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| Regresion Logistica | Espacio Original (94 vars) | 0.0% | `C=0.001` | 0.403 | 0.384 ± 0.120 | 0.410 | 0.942 | 0.494 | 0.651 | 0.252 |
+| LDA (Shrinkage) | Espacio Original (94 vars) | 0.0% | `shrinkage=0.99` | 0.311 | 0.312 ± 0.088 | 0.318 | 0.925 | 0.469 | 0.864 | 0.166 |
+| KNN | Espacio Original (94 vars) | 0.0% | `n_neighbors=31, weights=distance` | 1.000 | 0.347 ± 0.126 | 0.453 | 0.918 | 0.558 | 0.773 | 0.264 |
+| Random Forest | Espacio Original (94 vars) | 0.0% | `max_depth=None, min_samples_leaf=5` | 0.982 | 0.416 ± 0.102 | 0.464 | 0.953 | 0.563 | 0.667 | 0.346 |
+| Red Neuronal MLP | Espacio Original (94 vars) | 0.0% | `alpha=0.01, hidden_layer_sizes=(64, 32)` | 0.653 | 0.338 ± 0.242 | 0.480 | 0.942 | 0.506 | 0.606 | 0.305 |
+| SVM (RBF Kernel) | Espacio Original (94 vars) | 0.0% | `C=0.1, gamma=0.001` | 0.397 | 0.391 ± 0.119 | 0.419 | 0.939 | 0.531 | 0.667 | 0.293 |
+| Random Forest | PCA 90% Var (k=23) | 75.5% | `max_depth=12, min_samples_leaf=10` | 0.941 | 0.343 ± 0.139 | 0.420 | 0.934 | 0.511 | 0.651 | 0.274 |
+| SVM (RBF Kernel) | PCA 90% Var (k=23) | 75.5% | `C=0.1, gamma=0.003` | 0.417 | 0.401 ± 0.136 | 0.426 | 0.941 | 0.559 | 0.742 | 0.282 |
+| Random Forest | PCA 95% Var (k=31) | 67.0% | `max_depth=None, min_samples_leaf=10` | 0.961 | 0.350 ± 0.133 | 0.417 | 0.935 | 0.501 | 0.682 | 0.243 |
+| SVM (RBF Kernel) | PCA 95% Var (k=31) | 67.0% | `C=0.1, gamma=0.003` | 0.419 | 0.403 ± 0.134 | 0.443 | 0.944 | 0.568 | 0.742 | 0.293 |
+| Random Forest | UMAP (k=10) | 89.4% | `max_depth=6, min_samples_leaf=5` | 0.463 | 0.297 ± 0.175 | 0.331 | 0.914 | 0.506 | 0.682 | 0.249 |
+| SVM (RBF Kernel) | UMAP (k=10) | 89.4% | `C=100, gamma=0.003` | 0.237 | 0.241 ± 0.113 | 0.259 | 0.905 | 0.512 | 0.727 | 0.234 |
+| Random Forest | UMAP (k=20) | 78.7% | `max_depth=None, min_samples_leaf=5` | 0.935 | 0.274 ± 0.122 | 0.314 | 0.906 | 0.443 | 0.849 | 0.152 |
+| SVM (RBF Kernel) | UMAP (k=20) | 78.7% | `C=10, gamma=scale` | 0.212 | 0.216 ± 0.074 | 0.215 | 0.903 | 0.468 | 0.667 | 0.214 |
+| Gaussian NB (Extra) | Espacio Original (94 vars) | 0.0% | `var_smoothing=1e-09` | 0.253 | 0.256 ± 0.066 | 0.267 | 0.925 | 0.469 | 0.849 | 0.168 |
+| HistGradientBoosting (Extra) | Espacio Original (94 vars) | 0.0% | `learning_rate=0.05, max_depth=3` | 0.713 | 0.373 ± 0.097 | 0.430 | 0.951 | 0.554 | 0.742 | 0.275 |
 
-> Todos los valores reproducen literalmente los archivos de `results/` generados por el notebook (ningún número se transcribe a mano). En negrita, el mejor valor de cada columna. Los intervalos de confianza al 95 % (bootstrap estratificado, 1 000 réplicas) de los modelos del espacio original están en `results/tabla_modelos_base.csv`.
-
+> Los valores se generan a partir de los archivos de `results/` producidos por el notebook. Los intervalos de confianza al 95 % (bootstrap estratificado, 1,000 réplicas) están en `results/tabla_modelos_base.csv`. Con solo 66 quiebras en Test, las diferencias de F2 entre modelos no son concluyentes.
