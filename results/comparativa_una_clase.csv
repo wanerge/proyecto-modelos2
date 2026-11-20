@@ -1,0 +1,4 @@
+Detector (una clase),Ajustado con (solventes),Test ROC-AUC,Test PR-AUC,Recall@top66
+"One-Class SVM (RBF, nu=0.05)",4619,0.7428,0.1677,0.1515
+Isolation Forest (300 arboles),4619,0.8227,0.1949,0.2273
+Local Outlier Factor (novelty),4619,0.5642,0.1198,0.1212
