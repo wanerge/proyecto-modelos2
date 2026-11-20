@@ -118,3 +118,11 @@ Haga clic en la insignia superior **"Open in Colab"** o cargue el archivo `Proye
 | HistGradientBoosting (Extra) | Espacio Original (94 vars) | 0.0% | `learning_rate=0.05, max_depth=3` | 0.713 | 0.373 ± 0.097 | 0.430 | 0.951 | 0.554 | 0.742 | 0.275 |
 
 > Los valores se generan a partir de los archivos de `results/` producidos por el notebook. Los intervalos de confianza al 95 % (bootstrap estratificado, 1,000 réplicas) están en `results/tabla_modelos_base.csv`. Con solo 66 quiebras en Test, las diferencias de F2 entre modelos no son concluyentes.
+
+---
+
+## 🤖 Declaración de uso de inteligencia artificial y responsabilidad
+
+Utilizamos un asistente de inteligencia artificial (GitHub Copilot, en Visual Studio Code) como herramienta de apoyo para proponer la estructura del trabajo, escribir y depurar código, ejecutar los experimentos, generar tablas y figuras, redactar y reformular textos y compilar el informe.
+
+Nosotros definimos el problema y el alcance, decidimos los criterios metodológicos, solicitamos y revisamos cada modificación, corregimos afirmaciones no sustentadas por los resultados y verificamos que las cifras del texto coincidieran con las salidas del notebook. **Todos los integrantes asumimos plena responsabilidad por el contenido del informe y del repositorio.** La herramienta de IA no figura como autora ni asume responsabilidad alguna.
