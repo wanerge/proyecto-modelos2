@@ -1,0 +1,11 @@
+Modelo,Hiperparámetro,Valores probados,Combinaciones del modelo
+Regresion Logistica,C,"0.001, 0.01, 0.1, 1, 10",5
+LDA (Shrinkage),shrinkage,"auto, 0.1, 0.5, 0.9, 0.99",5
+KNN,n_neighbors,"5, 15, 31, 51",8
+KNN,weights,"uniform, distance",8
+Random Forest,max_depth,"6, 12, None",9
+Random Forest,min_samples_leaf,"1, 5, 10",9
+Red Neuronal MLP,hidden_layer_sizes,"(32,), (64, 32)",6
+Red Neuronal MLP,alpha,"0.001, 0.01, 0.1",6
+SVM (RBF Kernel),C,"0.01, 0.1, 1, 10, 100",20
+SVM (RBF Kernel),gamma,"0.001, 0.003, scale, 0.03",20

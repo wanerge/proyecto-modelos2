@@ -1,5 +1,5 @@
 Escalador,Max |z transformado|,Variables con max |z| > 10,Mediana |skew|,Variables con |skew| > 5
 Sin escalar,10000000000.0,24,11.363,62
 StandardScaler,82.57118141337206,75,11.363,62
-RobustScaler,159778730025634.2,78,11.363,62
+RobustScaler,159778730025738.2,78,11.363,62
 QuantileTransformer,5.19933758270342,0,0.008,1

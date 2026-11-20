@@ -1,5 +1,5 @@
-Espacio,Reducción (%),Modelo,Val PR-AUC,Test PR-AUC,Test ROC-AUC,Test F2,Test F1,Test MCC,Test Recall,Test Precision
-UMAP (k=10),89.4%,Random Forest,0.301 ± 0.176,0.3269,0.9047,0.4822,0.3297,0.3544,0.697,0.216
-UMAP (k=10),89.4%,SVM (RBF Kernel),0.250 ± 0.115,0.268,0.9086,0.4651,0.2881,0.3346,0.7879,0.1763
-UMAP (k=20),78.7%,Random Forest,0.262 ± 0.131,0.3044,0.9071,0.4497,0.3778,0.3657,0.5152,0.2982
-UMAP (k=20),78.7%,SVM (RBF Kernel),0.202 ± 0.085,0.2118,0.8976,0.4699,0.2994,0.3391,0.7576,0.1866
+Espacio,Reducción (%),Modelo,Hiperparámetros,Umbral,Train PR-AUC,Val PR-AUC (±2σ),Val ROC-AUC (±2σ),Test PR-AUC,Test PR-AUC 95% CI,Test ROC-AUC,Test ROC-AUC 95% CI,Test F2-Score,Test F2 95% CI,Test F1-Score,Test MCC,Test Recall,Test Precision
+UMAP (k=10),89.4%,Random Forest,"max_depth=6, min_samples_leaf=5",0.58,0.4634,0.297 ± 0.175,0.896 ± 0.045,0.3307,"[0.248, 0.455]",0.9141,"[0.877, 0.943]",0.5056,"[0.425, 0.585]",0.3644,0.3815,0.6818,0.2486
+UMAP (k=10),89.4%,SVM (RBF Kernel),"C=100, gamma=0.003",0.12,0.2368,0.241 ± 0.113,0.883 ± 0.044,0.2593,"[0.197, 0.369]",0.9046,"[0.869, 0.934]",0.5117,"[0.440, 0.583]",0.3542,0.3813,0.7273,0.2341
+UMAP (k=20),78.7%,Random Forest,"max_depth=None, min_samples_leaf=5",0.13,0.9352,0.274 ± 0.122,0.889 ± 0.045,0.3144,"[0.233, 0.426]",0.906,"[0.870, 0.935]",0.443,"[0.396, 0.489]",0.2581,0.3178,0.8485,0.1522
+UMAP (k=20),78.7%,SVM (RBF Kernel),"C=10, gamma=scale",0.13,0.2123,0.216 ± 0.074,0.888 ± 0.040,0.2147,"[0.168, 0.291]",0.9032,"[0.870, 0.931]",0.4681,"[0.389, 0.542]",0.3235,0.3434,0.6667,0.2136
