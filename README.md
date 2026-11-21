@@ -8,6 +8,12 @@ Trabajo final de laboratorio para la materia **Modelos y Simulación de Sistemas
 
 ---
 
+## 🎥 Video de la Entrega
+
+[Entrega Final Modelos Y Simulacion 2 // Predicción de Quiebra Empresarial con Aprendizaje de Máquina](https://www.youtube.com/watch?v=ue51Dx1Ptnc)
+
+---
+
 ## 👥 Integrantes del Equipo
 - **Wanerge Almanza Velasquez**
 - **Jhon Fredy Hoyos Cardenas**
