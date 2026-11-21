@@ -7,8 +7,21 @@
 \usepackage{cite}
 \usepackage{url}
 \usepackage{microtype}
-\usepackage{subcaption}
+\usepackage{stfloats}
+\usepackage{placeins}
 \graphicspath{{../figures/}}
+
+% Ajuste de parámetros de flotantes para evitar acumulación al final del documento
+\renewcommand{\topfraction}{0.90}
+\renewcommand{\bottomfraction}{0.85}
+\renewcommand{\textfraction}{0.07}
+\renewcommand{\floatpagefraction}{0.75}
+\setcounter{topnumber}{4}
+\setcounter{bottomnumber}{3}
+\setcounter{totalnumber}{6}
+\setcounter{dbltopnumber}{4}
+\renewcommand{\dbltopfraction}{0.90}
+\renewcommand{\dblfloatpagefraction}{0.75}
 
 \begin{document}
 
@@ -62,7 +75,7 @@ La literatura especializada en quiebra sobre este dataset ha explorado diversas 
 
 La Tabla~\ref{tab:estado_arte} contrasta sistemáticamente estas cuatro propuestas en términos de paradigma, preprocesamiento, protocolo de validación, métricas y resultados reportados.
 
-\begin{table*}[t]
+\begin{table*}[!tbp]
 \caption{Matriz Comparativa de las Investigaciones del Estado del Arte sobre el Dataset TEJ de Taiwán}
 \label{tab:estado_arte}
 \centering
@@ -94,7 +107,7 @@ Dividimos los datos de forma estratificada en Train (70\%, 4,773 empresas, 154 q
 
 Comparamos cinco familias de modelos: paramétricos (Regresión Logística y LDA con contracción), no paramétrico (KNN), ensamble de árboles (Random Forest con 300 árboles), red neuronal (MLP) y máquina de vectores de soporte con kernel RBF. Los modelos que lo permiten usan pesos de clase balanceados.
 
-\begin{table*}[t]
+\begin{table*}[!tbp]
 \centering
 \caption{Mallas de hiperparámetros evaluadas por modelo y combinación elegida en el espacio original (selección solo con Train).}
 \label{tab:mallas}
@@ -117,7 +130,7 @@ La Tabla~\ref{tab:modelos_base} resume los resultados en el espacio original de 
 
 Random Forest y KNN casi memorizan el entrenamiento (PR-AUC en Train de 0.982 y 1.000, frente a 0.416 y 0.347 en validación), mientras que la SVM y la Regresión Logística rinden de forma parecida en Train y validación. La precisión es baja en todos los modelos (0.17 a 0.35) debido a la baja prevalencia: hay entre 2 y 5 falsas alarmas por cada quiebra correctamente detectada.
 
-\begin{table*}[t]
+\begin{table*}[!tbp]
 \centering
 \caption{Desempeño de los seis modelos en el espacio original: Train, validación (media $\pm 2\sigma$ sobre 15 pliegues) y Test con intervalo de confianza bootstrap al 95\%.}
 \label{tab:modelos_base}
@@ -135,16 +148,16 @@ SVM (RBF) & 0.397 & $0.391 \pm 0.119$ & $0.419$ $[0.324, 0.532]$ & $0.939$ & $0.
 \end{tabular}
 \end{table*}
 
-\begin{figure*}[t]
+\begin{figure*}[!tbp]
 \centering
-\includegraphics[width=0.95\textwidth]{fig4c_efecto_hiperparametros.png}
+\includegraphics[width=0.84\textwidth]{fig4c_efecto_hiperparametros.png}
 \caption{Efecto de los hiperparámetros en el PR-AUC de validación (5 pliegues) para cada combinación de la malla; en rojo, la combinación elegida (Figura 4c del notebook).}
 \label{fig:hiper}
 \end{figure*}
 
-\begin{figure*}[t]
+\begin{figure*}[!tbp]
 \centering
-\includegraphics[width=0.85\textwidth]{fig4_curvas_roc_pr_base.png}
+\includegraphics[width=0.80\textwidth]{fig4_curvas_roc_pr_base.png}
 \caption{Curvas ROC (izquierda) y Precision-Recall (derecha) de los seis modelos en el conjunto de test (Figuras 4a y 4b del notebook).}
 \label{fig:roc_pr}
 \end{figure*}
@@ -159,7 +172,7 @@ El cálculo univariado de la razón de Fisher ($J$) y del AUC univariado sobre T
 \subsection{Extracción Lineal con PCA}
 La varianza explicada acumulada (Figura~\ref{fig:pca}) muestra que $k=23$ componentes retienen el 90\% de la varianza (75.5\% menos variables) y $k=31$ el 95\% (67.0\% menos). Repetimos la búsqueda de hiperparámetros con las mismas mallas en cada subespacio, con el PCA ajustado dentro de cada pliegue (Tabla~\ref{tab:reduccion}). Con $k=23$ la SVM no pierde desempeño ($F_2$ de $0.531$ a $0.559$; ROC-AUC de $0.939$ a $0.941$) y con $k=31$ alcanza el mayor $F_2$ del estudio ($0.568$). El Random Forest pierde algo (ROC-AUC de $0.953$ a $0.934$; $F_2$ de $0.563$ a $0.511$). Las diferencias de $F_2$ están dentro de los intervalos de confianza, por lo que concluimos que PCA \emph{mantiene} el desempeño de la SVM, no que lo mejora.
 
-\begin{table*}[t]
+\begin{table*}[!tbp]
 \centering
 \caption{Resultados de Random Forest y SVM en el espacio original, PCA y UMAP, con hiperparámetros ajustados de nuevo en cada espacio.}
 \label{tab:reduccion}
@@ -181,33 +194,36 @@ UMAP, $k=20$ (78.7\%) & Random Forest & 0.935 & $0.274 \pm 0.122$ & 0.314 & 0.90
 \end{tabular}
 \end{table*}
 
-\begin{figure}[t]
+\begin{figure}[!htbp]
 \centering
 \includegraphics[width=\columnwidth]{fig6_pca_varianza_explicada.png}
 \caption{Varianza explicada acumulada por los componentes principales; se marcan $k=23$ (90\%) y $k=31$ (95\%) (Figura 6 del notebook).}
 \label{fig:pca}
 \end{figure}
 
+\begin{figure}[!htbp]
+\centering
+\includegraphics[width=0.95\columnwidth]{fig7a_pca_2d.png}\\[4pt]
+\includegraphics[width=0.95\columnwidth]{fig7b_umap_2d.png}
+\caption{Proyección bidimensional de las empresas de entrenamiento con PCA (arriba) y UMAP (abajo); en rojo, las empresas en quiebra (Figura 7 del notebook).}
+\label{fig:umap}
+\end{figure}
+
 \subsection{Extracción No Lineal con UMAP}
 Proyectamos con UMAP (ajustado solo con Train) a $k=10$ y $k=20$ dimensiones. El PR-AUC en test cayó a $0.21$--$0.33$ (frente a $0.42$--$0.46$ del espacio original) y el ROC-AUC a $0.903$--$0.914$; el $F_2$ se mantuvo en $0.44$--$0.51$ porque el umbral se recalibra, pero el ordenamiento del riesgo empeoró claramente. UMAP resulta útil para visualizar (Figura~\ref{fig:umap}), pero comprimir con él no ayudó a clasificar mejor en este conjunto de ratios contables. Como salvedad, ajustamos UMAP una sola vez sobre todo Train, por lo que la validación en ese espacio puede ser levemente optimista.
 
-\begin{figure*}[t]
-\centering
-\includegraphics[width=0.8\textwidth]{fig7_umap_pca_2d.png}
-\caption{Proyección bidimensional de las empresas de entrenamiento con PCA (izquierda) y UMAP (derecha); en rojo, las empresas en quiebra (Figura 7 del notebook).}
-\label{fig:umap}
-\end{figure*}
-
+\newpage
 \section{Explicabilidad del Modelo con SHAP}
 El análisis con \texttt{TreeExplainer} sobre el Random Forest (Figura~\ref{fig:shap}) muestra que las variables más influyentes se agrupan en tres ideas: (i) endeudamiento, donde valores altos de \texttt{Borrowing dependency}, \texttt{Total debt/Total net worth}, \texttt{Debt ratio \%} y \texttt{Liability to Equity} empujan la predicción hacia la quiebra; (ii) capital propio y liquidez, donde valores bajos de \texttt{Net worth/Assets}, \texttt{Equity to Liability} y \texttt{Quick Ratio} aumentan el riesgo; y (iii) rentabilidad, donde valores bajos de \texttt{Persistent EPS} y \texttt{Net Income to Total Assets} también lo aumentan. Esto es coherente con la intuición financiera, pero SHAP describe qué usa el modelo para decidir y no demuestra relaciones causales.
 
-\begin{figure}[t]
+\begin{figure}[!htbp]
 \centering
 \includegraphics[width=\columnwidth]{fig8_shap_summary.png}
 \caption{Valores SHAP del Random Forest para la clase quiebra: variables más influyentes y dirección de su efecto (Figura 8 del notebook).}
 \label{fig:shap}
 \end{figure}
 
+\FloatBarrier
 \section{Conclusiones}
 \begin{enumerate}
     \item Los seis modelos distinguen bien las empresas en riesgo (ROC-AUC de $0.918$ a $0.953$; PR-AUC en test de $0.32$ a $0.48$, frente a $0.032$ del azar). Random Forest da el mejor ordenamiento ($\text{ROC-AUC}=0.953$, $F_2=0.563$) y la SVM es la segunda ($0.939$ y $0.531$).
@@ -218,6 +234,7 @@ El análisis con \texttt{TreeExplainer} sobre el Random Forest (Figura~\ref{fig:
     \item Limitaciones: mallas de hiperparámetros pequeñas (en la Regresión Logística y en el $\gamma$ de la SVM el óptimo quedó en un borde de la malla) y PR-AUC de validación algo optimista por provenir de la mejor combinación; UMAP ajustado una sola vez sobre Train; sin remuestreo (SMOTE/ENN), lo que puede limitar el Recall.
 \end{enumerate}
 
+\FloatBarrier
 \section*{Declaración de uso de inteligencia artificial}
 Utilizamos un asistente de inteligencia artificial (GitHub Copilot, en Visual Studio Code) para proponer la estructura del trabajo, escribir y depurar código, ejecutar los experimentos, generar tablas y figuras y redactar o reformular textos. Nosotros definimos el problema, los criterios metodológicos y las decisiones del proyecto, revisamos cada modificación y verificamos que las cifras del texto coincidieran con las salidas del notebook. Todos los integrantes asumimos plena responsabilidad por el contenido del informe y del repositorio; la herramienta de IA no figura como autora.
 
